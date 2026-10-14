@@ -18,6 +18,7 @@ The project consists of two separate applications that communicate over
 HTTPS: a Rust desktop recorder and an ASP.NET Core web application.
 
 ## Project capabilities
+https://github.com/user-attachments/assets/40e75577-df21-4b84-9b42-00ffaf43102d
 
 ### Desktop application
 
@@ -75,6 +76,8 @@ playback.
 The upload implementation supports different transfer strategies so
 their behaviour and performance can be compared when handling large
 files.
+
+For an in-depth explanation of the system architecture, design decisions, and implementation details, see the engineering thesis (available only in Polish) in the `Thesis/` directory.
 
 ## Development status
 
