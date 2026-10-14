@@ -104,3 +104,15 @@ files for component-specific setup instructions.
 This repository is published as a software project and demonstration of
 an integrated desktop-and-web workflow for recording, uploading, and
 accessing video materials.
+
+## Copyright and Usage Restrictions
+
+Copyright © 2026 Radoslaw Madzia. All rights reserved.
+
+This repository is publicly available for viewing and evaluation purposes only. It is intended to showcase an engineering thesis project and its implementation.
+
+No permission or license is granted to use, copy, reproduce, modify, distribute, sublicense, or otherwise exploit any part of this repository, including its source code, documentation, thesis, and compiled binaries, without prior written permission from the copyright holder.
+
+Both commercial and non-commercial use are prohibited without explicit authorization.
+
+Making this repository publicly accessible does not grant any rights to its contents. All rights are reserved by the copyright holder.
