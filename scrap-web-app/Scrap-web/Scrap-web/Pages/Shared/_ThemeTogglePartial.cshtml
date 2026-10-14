@@ -1,0 +1,38 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<button id="theme-toggle-btn"
+        type="button"
+        class="rounded-lg p-2 text-primary hover:bg-hover hover:text-background-distinct"
+        aria-label="Toggle dark mode">
+
+    <!-- Sun -->
+    <svg id="theme-icon-light"
+            class="hidden h-5 w-5 dark:block"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor">
+        <path stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-2.636-1.591 1.591M5.25 12H3m3.636-5.864L5.045 4.545M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+    </svg>
+
+    <!-- Moon -->
+    <svg id="theme-icon-dark"
+            class="block h-5 w-5 dark:hidden"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor">
+        <path stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21.752 15.002A9.718 9.718 0 0 1 18 15.75
+                    9.75 9.75 0 0 1 8.25 6
+                    c0-1.33.266-2.598.748-3.752
+                    A9.753 9.753 0 1 0 21.752 15.002Z" />
+    </svg>
+</button>

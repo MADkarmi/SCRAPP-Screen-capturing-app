@@ -1,0 +1,107 @@
+import { Button, VerticalBox , HorizontalBox, ListView, StandardButton, StandardListView, GridBox, GroupBox , ComboBox, CheckBox, StyleMetrics, Slider} from "std-widgets.slint";
+import { Page } from "page.slint";
+import { RecordingSourcePicker, RecordingSource, SelectionMode } from "../partials/SourcesListItem.slint";
+
+export component RecorderPage inherits Page {
+    showPageTitle: false;
+
+    callback switchToSettingsPage();
+    callback switch-to-uploads-page();
+
+    in property <bool> enableRecording;
+
+    in-out property <bool> recordingState;
+    callback toggle-recording-state();
+
+    in-out property <bool> streamingState;
+    callback toggle-streaming-state();
+
+    in-out property <[RecordingSource]> videoSourceListModel;
+    in-out property <[RecordingSource]> audioSourceListModel;
+
+    callback request-application-closure();
+
+    callback on-source-selected(RecordingSource, SelectionMode);
+
+    VerticalBox {
+        Rectangle { //preview
+            min-height: 53px;
+            min-width: 30px;
+            Text {
+                text: root.recordingState ? "Recording Started" : "Recording Stopped";
+                font-size: 15px;
+            }
+        }
+        HorizontalBox { //settings group
+            height: 40%;
+            Rectangle {
+                max-width: 140px;
+                min-width: 0px;
+            }
+            source := RecordingSourcePicker {
+                changeEnabled: true;
+                label: "Video Sources:";
+                sourceListModel: root.videoSourceListModel;
+                selectionMode: SelectionMode.Single;
+                on-source-selected(source) => {
+                    root.on-source-selected(source, SelectionMode.Single);
+                }
+            }
+            audiosource := RecordingSourcePicker {
+                changeEnabled: root.recordingState == false && root.streamingState == false;
+                label: "Audio Sources:";
+                sourceListModel: root.audioSourceListModel;
+                selectionMode: SelectionMode.Multiple;
+                on-source-selected(source) => {
+                    root.on-source-selected(source, SelectionMode.Multiple);
+                }
+            }
+
+            VerticalBox { //buttons
+                width: 140px;
+                recordingButton := Button {
+                    text: root.recordingState ? "Stop Recording" : "Start Recording";
+                    enabled: enableRecording && !root.streamingState;
+                    clicked => {
+                        root.toggle-recording-state();
+                    }
+                }
+
+                streamingButton := Button {
+                    text: root.streamingState ? "Pause Stream" : "Start Streaming";
+                    enabled: false; //streaming not implemented yet
+                    clicked => {
+                        root.toggle-streaming-state();
+                    }
+                }
+
+                uploadVideoButton := Button {
+                    text: "Upload Video";
+                    enabled: !root.recordingState && !root.streamingState;
+                    clicked => {
+                        root.switch-to-uploads-page();
+                    }
+                }
+
+                settingsButton := Button {
+                    text: "Settings";
+                    enabled: !root.recordingState && !root.streamingState;
+                    clicked => {
+                        root.switchToSettingsPage();
+                    }
+                }
+
+                closeAppButton := Button {
+                    text: "Close App";
+                    enabled: !root.recordingState && !root.streamingState;
+                    clicked => {
+                        root.request-application-closure();
+                    }
+                }
+            }
+
+        }
+
+    }
+
+}

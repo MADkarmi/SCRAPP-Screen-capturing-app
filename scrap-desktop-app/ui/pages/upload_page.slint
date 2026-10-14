@@ -1,0 +1,188 @@
+import {
+    Button,
+    VerticalBox,
+    HorizontalBox,
+    ListView,
+    LineEdit,
+    StandardButton,
+    StandardListView,
+    GridBox,
+    GroupBox,
+    ComboBox,
+    CheckBox,
+    StyleMetrics,
+    TextEdit,
+    Slider
+} from "std-widgets.slint";
+import { Page } from "page.slint";
+import { SideBar } from "../partials/sidebar.slint";
+import { TransparentLoadingSpinner } from "../partials/transparentLoadingSpinner.slint";
+import { Button, Palette } from "std-widgets.slint";
+
+export component UploadPage inherits Page {
+    showPageTitle: false;
+
+    callback upload-stream-video();
+    callback upload-multipart-video();
+    callback upload-chunked-video();
+    callback discard();
+    callback file-picker();
+
+
+    in-out property <string> file;
+    in-out property <string> video_title;
+    in-out property <string> video_description;
+    in-out property <bool> uploading: false;
+
+    VerticalLayout {
+
+        HorizontalLayout {
+            min-width: 800px;
+            min-height: 400px;
+            output:= Rectangle{
+
+                VerticalLayout {
+                    y: 30px;
+                    x: 30px;
+                    width: parent.width - 2*self.x;
+                    spacing: 5px;
+
+                    @children height: 50px;
+
+                    path:= Rectangle{
+                        background: Palette.background.brighter(0.2);
+
+                        HorizontalLayout{
+                            spacing: 5px;
+
+                            padding-left: 10px;
+                            t:= Text {
+                                text: "File:";
+                                vertical-alignment: center;
+                                width: 150px;
+                                font-size: 18px;
+                            }
+
+                            LineEdit {
+                                min-width: 300px;
+                                text <=> root.file;
+                                horizontal-alignment: left;
+                                font-size: 18px;
+                                enabled: false;
+                            }
+
+
+                            Button {
+                                text: "Browse";
+                                width: 100px;
+                                clicked => {
+                                    root.file-picker();
+                                }
+                            }
+                        }
+                    }
+
+                    title:= Rectangle{
+                        background: Palette.background.brighter(0.2);
+
+                        HorizontalLayout{
+                            spacing: 5px;
+
+                            padding-left: 10px;
+                            Text {
+                                text: "Title: *";
+                                vertical-alignment: center;
+                                width: 150px;
+                                font-size: 18px;
+                            }
+
+                            LineEdit{
+                                text <=> root.video_title;
+                                placeholder-text: "Video title";
+                                enabled: !root.uploading;
+                            }
+                        }
+                    }
+
+                    description:= Rectangle{
+                        background: Palette.background.brighter(0.2);
+                        HorizontalLayout{
+                            spacing: 5px;
+
+                            padding-left: 10px;
+                            Text {
+                                text: "Description:";
+                                vertical-alignment: center;
+                                width: 150px;
+                                font-size: 18px;
+                            }
+
+                            TextEdit{
+                                height: 100px;
+                                text <=> root.video_description;
+                                placeholder-text: "Video description";
+                                enabled: !root.uploading;
+                                wrap: word-wrap;
+                            }
+                        }
+                    }
+                    HorizontalLayout {
+                        alignment: center;
+                        if (root.uploading): TransparentLoadingSpinner {
+                            width: 200px;
+                            height: 200px;
+                        }
+                    }
+
+                }
+            }
+        }
+
+
+        HorizontalLayout {
+            height: 50px;
+            spacing: 8px;
+            Rectangle {}
+
+            uploadStreamButton:= Button{
+                preferred-width: 100px;
+                text: "Upload Stream";
+                enabled: !root.uploading;
+                clicked => {
+                    root.upload-stream-video();
+                    root.uploading = true;
+                }
+            }
+
+            uploadMultipartButton:= Button{
+                preferred-width: 100px;
+                text: "Upload Multipart";
+                enabled: !root.uploading;
+                clicked => {
+                    root.upload-multipart-video();
+                    root.uploading = true;
+                }
+            }
+
+            uploadChunkedButton:= Button{
+                preferred-width: 100px;
+                text: "Upload Chunked";
+                enabled: !root.uploading;
+                clicked => {
+                    root.upload-chunked-video();
+                    root.uploading = true;
+                }
+            }
+
+            discardButton:= Button{
+                preferred-width: 100px;
+                text: "Cancel";
+                enabled: !root.uploading;
+                clicked => {
+                    root.discard();
+                }
+
+            }
+        }
+    }
+}

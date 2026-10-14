@@ -1,0 +1,12 @@
+@page
+@model DownloadPersonalDataModel
+@{
+    ViewData["Title"] = "Download Your Data";
+    ViewData["ActivePage"] = ManageNavPages.PersonalData;
+}
+
+<div class="section-name max-w-xl">@ViewData["Title"]</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

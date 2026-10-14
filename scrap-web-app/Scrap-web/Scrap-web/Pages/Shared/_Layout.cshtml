@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Scrap_web</title>    
+    <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    @* <link rel="stylesheet" href="~/Scrap_web.styles.css" asp-append-version="true" /> *@
+    <script>
+        (() => {
+            const storedtheme = localStorage.getItem('theme');
+            if (storedtheme === 'dark' ||
+                (storedtheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+                (!storedtheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                }
+        })();
+    </script>    
+</head>
+<body class="flex min-h-screen flex-col bg-background">
+    <header class="sticky top-0 z-50">
+        <partial name="_Header" />
+    </header>
+    <div class="flex flex-1 flex-grow p-4">
+        <main role="main" class="flex flex-1 flex-col text-primary" >
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-t border-border">
+        <div class="mx-auto flex h-[30] items-center text-xs text-third">
+            &copy; 2026 - Scrap_web - 
+            <a class="ml-1 rounded-lg p-1 hover:bg-hover hover:text-background"
+                asp-area="" 
+               asp-page="/Privacy">
+               Privacy
+            </a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>    
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/theme.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

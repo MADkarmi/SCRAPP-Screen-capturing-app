@@ -1,0 +1,16 @@
+{
+  "name": "scrap-web",
+  "version": "1.0.0",
+  "description": "Start tailwind watch process for development:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}

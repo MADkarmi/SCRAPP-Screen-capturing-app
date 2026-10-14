@@ -1,0 +1,30 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <h1 class="mb-6 text-lg font-semibold">
+        Latest Videos
+    </h1>
+
+    <div class="flex flex-wrap items-center justify-center">
+        @if(Model.Videos.Count == 0)
+        {
+            <p class="text-third">
+                No published videos available.
+            </p>
+        }
+        else
+        {
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                @foreach (var video in Model.Videos)
+                {
+                    <partial name="_VideoCardPartial" model="video" />
+                }
+            </div>
+        }
+        
+    </div>
+</div>

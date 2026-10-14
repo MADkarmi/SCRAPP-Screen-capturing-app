@@ -1,0 +1,154 @@
+﻿@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    --color-background: var(--background);
+    --color-background-distinct: var(--background-distinct);
+    --color-primary: var(--primary);
+    --color-second: var(--second);
+    --color-third: var(--third);
+    --color-fourth: var(--fourth);
+    --color-fifth: var(--fifth);
+    --color-sixth: var(--sixth);
+    --color-border: var(--border);
+    --color-border-light: var(--border-light);
+    --color-submit-primary: var(--submit-primary);
+    --color-submit-secondary: var(--submit-secondary);
+    --color-submit-light: var(--submit-light);
+    --color-red-dark: #333;
+    --color-hover: var(--hover);
+    --color-danger: #e7000b;
+    --color-succes: #4cff00;
+}
+
+:root {
+    --background: #fff;
+    --background-distinct: #f9f9f9;
+    --primary: #282828;
+    --second: #333333;
+    --third: #555;
+    --fourth: #eee;
+    --fifth: #f5f5f5;
+    --sixth: #f9f9f9;
+    --border: #ddd;
+    --border-light: #ccc;
+    --submit-primary: #fff;
+    --submit-secondary: #4caf50;
+    --submit-light: #45a049;
+    --hover: #364153;
+    
+}
+
+.dark {
+    --background: #282828;
+    --background-distinct: #333333;
+    --primary: #C9C9C9;
+    --second: #fff;
+    --third: #ddd;
+    --fourth: #333;
+    --fifth: #ccc;
+    --sixth: #444;
+    --border: #555;
+    --border-light: #666;
+    --hover: #f3f4f6;
+    --submit-secondary: #016630;
+}
+
+@utility section-name{
+    @apply z-30 flex items-center justify-start text-xl text-second;
+}
+
+@utility status-alert-error {
+    @apply border-red-300 bg-red-50 text-red-800 dark:border-red-700 dark:bg-red-950 dark:text-red-200;
+}
+
+@utility status-alert-succes {
+    @apply border-green-300 bg-green-50 text-green-800 dark:border-green-700 dark:bg-green-950 dark:text-green-200;
+}
+
+@utility alert-danger {
+    @apply rounded-md border border-red-200 bg-red-50 px-4 py-3 text-red-800;
+}
+
+@utility alet-warning {
+    @apply rounded-md border border-yellow-200 bg-yellow-50 px-4 py-3 text-yellow-800;
+}
+
+@utility redirect-nav-btn {
+    @apply rounded-lg p-1 text-second hover:bg-hover hover:text-background;
+}
+
+@utility redirect-btn {
+    @apply m-2 rounded-lg bg-background-distinct p-4 text-second hover:bg-hover hover:text-background;
+}
+
+@utility button-primary {
+    @apply rounded-md bg-primary px-4 py-2 font-medium text-white hover:bg-primary/90;
+}
+
+@utility button-danger {
+    @apply rounded-md bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700;
+}
+
+/*sidebar*/
+@utility side-bar {
+    @apply -mx-6 flex flex-1 items-stretch divide-x divide-border-light;
+}
+
+@utility side-bar-title {
+    @apply pt-20 pb-3 text-second;
+}
+
+@utility side-bar-navigation {
+    @apply -mt-16 -mb-6 w-full bg-background-distinct pl-10 md:w-1/4;
+}
+
+@utility side-bar-body {
+    @apply mb-4 flex flex-col items-center px-2 md:w-3/4;
+}
+
+@utility side-bar-nav-items {
+    @apply flex w-64 flex-col space-y-3;
+}
+
+@utility side-bar-nav-item {
+    @apply flex;
+}
+
+@utility side-bar-nav-link {
+    @apply w-full hover:bg-background hover:text-lg hover:text-second;
+}
+
+/*forms*/
+@utility form-group {
+    @apply relative mb-4;
+}
+
+@utility form-control {
+    @apply w-full rounded-md border border-border-light bg-background-distinct px-3 pt-5 pb-2 text-primary transition outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:bg-fourth disabled:text-third;
+}
+
+@utility form-label {
+    @apply pointer-events-none absolute top-1 left-3 text-xs text-third transition-all;
+}
+
+@utility form-checkbox {
+    @apply mb-4;
+}
+
+@utility form-checkbox-label {
+    @apply flex w-fit cursor-pointer items-center gap-2 text-sm text-primary;
+}
+
+@utility checkbox {
+    @apply size-4 cursor-pointer rounded border border-border-light bg-background-distinct accent-primary focus:ring-2 focus:ring-primary/20;
+}
+
+@utility form-button {
+    @apply text-submit-primary ms-auto block rounded-md bg-submit-secondary px-4 py-2.5 text-sm font-medium transition hover:bg-submit-light focus:ring-2 focus:ring-submit-secondary/30 focus:outline-none;
+}
+
+@utility form-button-casual {
+    @apply ms-auto block rounded-md bg-background-distinct px-4 py-2.5 text-sm font-medium text-primary transition hover:bg-submit-light focus:ring-2 focus:ring-submit-secondary/30 focus:outline-none;
+}

@@ -1,0 +1,17 @@
+﻿@model string
+
+@if (!String.IsNullOrEmpty(Model))
+{
+    var statusMessageClass = Model.StartsWith("Error") ?
+        "status-alert-error" :
+        "status-alert-succes";
+
+    <button type="button"
+            class="m-5 flex w-full items-start gap-3 rounded-md @statusMessageClass border px-4 py-3 text-lg leading-none opacity-60 transition-opacity hover:opacity-100 focus:outline-none"
+            role="alert"
+            data-bs-dismiss="alert"
+            onclick="this.remove()"
+            aria-label="Close">
+        @Model
+    </button>
+}

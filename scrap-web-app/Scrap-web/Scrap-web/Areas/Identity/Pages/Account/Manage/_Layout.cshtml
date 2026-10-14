@@ -1,0 +1,30 @@
+﻿@{
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout != null)
+    {
+        Layout = parentLayout.ToString();
+    }
+    else
+    {
+        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+    }
+}
+<div class="flex min-h-0 flex-1 flex-col gap-3">
+    <div class="section-name z-30 pl-30">
+        Manage your account
+    </div>
+
+    <div class="flex flex-1 p-2">                
+        <div class="side-bar">            
+            <div class="side-bar-navigation">
+                <div class="side-bar-title">Change account settings</div>
+                <partial name="_ManageNav" />
+            </div>
+            <div class="side-bar-body">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}

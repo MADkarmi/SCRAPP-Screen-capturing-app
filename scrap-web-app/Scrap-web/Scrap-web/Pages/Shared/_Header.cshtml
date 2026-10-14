@@ -1,0 +1,33 @@
+﻿
+@{
+}
+<nav class="border-b border-border bg-background-distinct shadow-sm">
+    <div class="mx-auto flex min-h-20 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <a class="redirect-nav-btn text-xl font-semibold"
+           asp-area=""
+           asp-page="/Index">
+            Scrap_web
+        </a>
+        <div id="navbar" class="ml-4 flex items-start gap-3">
+            <a class="redirect-nav-btn"
+               asp-area=""
+               asp-page="/Index">
+                Latest Videos
+            </a>
+            @if(User.Identity?.IsAuthenticated == true)
+            {
+                <a class="redirect-nav-btn"
+                   asp-area=""
+                   asp-page="/Videos/Index">
+                    My Videos
+                </a>
+            }
+            
+        </div>
+        <div class="ml-auto flex items-center gap-3">
+            <partial name="_LoginPartial" />
+            <partial name="_ThemeTogglePartial" />
+        </div>
+    </div>
+
+</nav>

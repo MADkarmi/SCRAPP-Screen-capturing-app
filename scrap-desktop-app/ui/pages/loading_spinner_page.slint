@@ -1,0 +1,16 @@
+import { Page } from "page.slint";
+import { Spinner } from "std-widgets.slint";
+export component LoadingSpinner inherits Page {
+    showPageTitle: false;
+    VerticalLayout {
+        alignment: center;
+        HorizontalLayout {
+            alignment: center;
+            Spinner {
+                width: 100px;
+                height: 100px;
+                indeterminate: true;
+            }
+        }
+    }
+}

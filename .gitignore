@@ -1,0 +1,14 @@
+scapTrial/
+scap-beta/
+scap-trial/
+windows-cap-trial/
+/scrap-web-app/Scrap-web/.vs/Scrap-web
+/scrap-web-app/Scrap-web/Scrap-web/node_modules
+/scrap-web-app/**/[Dd]ebug/
+/scrap-web-app/**/**/[Bb]in/
+/scrap-web-app/**/[Oo]bj/
+/scrap-web-app/**/.vs/
+/scrap-web-app/Scrap-web/Scrap-web/FileStorage/uploads/*
+/scrap-web-app/Scrap-web/Scrap-web/FileStorage/videos/*
+.vs/
+node_modules/

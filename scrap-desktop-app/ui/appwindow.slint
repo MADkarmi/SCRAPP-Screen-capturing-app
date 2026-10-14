@@ -1,0 +1,291 @@
+import {
+    Button,
+    VerticalBox,
+    HorizontalBox,
+    ListView,
+    StandardButton,
+    StandardListView,
+    GridBox,
+    GroupBox,
+    ComboBox,
+    CheckBox,
+    StyleMetrics,
+    Slider,
+    TextEdit
+} from "std-widgets.slint";
+import { NavBar } from "partials/navbar.slint";
+import { SideBar } from "partials/sidebar.slint";
+import { AboutPage, AppSettingsPage, RecorderPage, UploadPage, LoadingSpinner } from "pages/pages.slint";
+import { RecordingSourcePicker, RecordingSource, SelectionMode } from "partials/SourcesListItem.slint";
+import {RecorderSupportedSettings} from "pages/app_settings_page.slint";
+
+export { RecordingSource }
+
+export component AppWindow inherits Window {
+    preferred-width: 1000px;
+    preferred-height: 500px;
+    min-width: 800px;
+    min-height: 500px;
+    title: @tr("Scrap Desktop 0.1.0");
+    icon: @image-url("icons/icon.png");
+    in property <bool> enableRecording;
+
+    in property <RecorderSupportedSettings> RecorderSupportedSettings;
+    //no-frame: true;
+    property <brush> textColor: textForColor.color;
+    in-out property <bool> switchToSettingsPage;
+    in-out property <bool> switchToUploadsPage;
+    in property <bool> authenticating: false;
+
+    //recording and streaming state properties and callbacks
+    in-out property<bool> recordingState: false;
+    callback toggle-recording-state();
+    in-out property<bool> streamingState: false;
+    callback toggle-streaming-state();
+
+    callback request-application-closure();
+
+    //settings popup properties and callbacks
+    in-out property <string> folderPath;
+    callback native-folder-picker();
+    in-out property <string> fileFormat;
+    in-out property <string> fps;
+    in-out property <string> resolution;
+    callback save-settings-to-file();
+
+    //upload page properties and callbacks
+    callback switch-to-uploads-page();
+    callback upload-stream-video();
+    callback upload-multipart-video();
+    callback upload-chunked-video();
+    callback logout();
+    callback native-file-picker();
+    in-out property <string> uploadFileName;
+    in-out property <string> uploadTitle;
+    in-out property <string> uploadDescription;
+    in-out property <bool> uploading: false;
+
+    callback on-source-selected(RecordingSource, SelectionMode);
+
+    in-out property <[RecordingSource]> audioSourceListModel: [
+        {title: "test", deviceId: 1},
+        {title: "test1", deviceId: 2},
+        {title: "test2", deviceId: 3},
+    ];
+    in-out property <[RecordingSource]> videoSourceListModel: [
+        { title: "Implement the .slint file", isActive: true },
+        { title: "Do the Rust part", isActive: true },
+        { title: "Make the C++ code", isActive: false },
+        { title: "Write some JavaScript code", isActive: false },
+        { title: "Test the application", isActive: false },
+        { title: "Ship to customer", isActive: false },
+        { title: "???", isActive: false },
+        { title: "Profit", isActive: false },
+        { title: "Ship to customer", isActive: false },
+        { title: "???", isActive: false },
+        { title: "Profit", isActive: false },
+        { title: "Ship to customer", isActive: false },
+        { title: "???", isActive: false },
+        { title: "Profit", isActive: false },
+        { title: "Ship to customer", isActive: false },
+        { title: "???", isActive: false },
+        { title: "Profit", isActive: false },
+    ];
+
+    textForColor := Text{}
+
+    VerticalLayout {
+        if (!root.switchToSettingsPage
+            && !root.switchToUploadsPage
+            && !root.authenticating):
+            RecorderPage {
+                recordingState: root.recordingState;
+                streamingState: root.streamingState;
+                videoSourceListModel: root.videoSourceListModel;
+                audioSourceListModel: root.audioSourceListModel;
+                enableRecording: root.enableRecording;
+
+                toggle-recording-state => {
+                    root.toggle-recording-state();
+                }
+                toggle-streaming-state => {
+                    root.toggle-streaming-state();
+                }
+                request-application-closure => {
+                    root.request-application-closure();
+                }
+                switchToSettingsPage => {
+                    root.switchToSettingsPage = !root.switchToSettingsPage;
+                }
+                on-source-selected(source, selectionMode) => {
+                    root.on-source-selected(source, selectionMode);
+                }
+                switch-to-uploads-page => {
+                    root.switch-to-uploads-page();
+                }
+        }
+
+        if (root.switchToSettingsPage): AppSettingsPage {
+            RecorderSupportedSettings: root.RecorderSupportedSettings;
+            folderPath: root.folderPath;
+            fileFormat: root.fileFormat;
+            fps: root.fps;
+            resolution: root.resolution;
+            discard() => {
+                root.switchToSettingsPage = !root.switchToSettingsPage;
+            }
+            folder-picker() => {
+                root.native-folder-picker();
+            }
+            save-settings => {
+                //root.saveFolderPath = self.folderPath;
+                root.fileFormat = self.fileFormat;
+                root.fps = self.fps;
+                root.resolution = self.resolution;
+                root.save-settings-to-file();
+
+                root.switchToSettingsPage = !root.switchToSettingsPage;
+            }
+        }
+
+        if(root.switchToUploadsPage): UploadPage {
+            file: root.uploadFileName;
+            video_title <=> root.uploadTitle;
+            video_description <=> root.uploadDescription;
+            uploading <=> root.uploading;
+            discard() => {
+                root.logout();
+                root.switchToUploadsPage = !root.switchToUploadsPage;
+            }
+            file-picker() => {
+                root.native-file-picker();
+            }
+            upload-stream-video() => {
+                root.upload-stream-video();
+            }
+            upload-multipart-video() => {
+                root.upload-multipart-video();
+            }
+            upload-chunked-video() => {
+                root.upload-chunked-video();
+            }
+        }
+
+        if(root.authenticating): LoadingSpinner {
+            HorizontalLayout {
+                alignment: center;
+                Text {
+                    text: "Authenticating...";
+                    font-size: 20px;
+                }
+            }
+
+        }
+
+    }
+
+
+    //settings popup
+    callback settings_popup_confirmed;
+    callback show_confirm_popup;
+    show_confirm_popup => { settings_popup.show(); }
+
+    settings-popup := PopupWindow {
+        width: parent.width;
+        height: parent.height;
+        close-policy: PopupClosePolicy.no-auto-close;
+
+        Rectangle {
+            background: root.background;
+            border-color: root.textColor;
+            border-width: 1px;
+        }
+        settings_popup_layout := Dialog {
+            height:100%; width: 100%;
+            GridLayout  {
+                spacing: 5px;
+                Text {
+                    text: "Output";
+                }
+                Row {
+                    Text {
+                        text: "Folder Path";
+                    }
+                    Text {
+                        text: "path/path/path";
+                        col: 1;
+                    }
+                    Button {
+                        text: "pick";
+                        col: 2;
+                    }
+                }
+
+                Row {
+                    Text {
+                        text: "File type:";
+                    }
+
+                    comb := ComboBox {
+                        model: [
+                            ".mp4",
+                            "mov",
+                            "mkv",
+                        ];
+                    }
+                }
+            }
+
+            Button {
+                width: 80px;
+                text: "Save";
+                dialog-button-role: action;
+                clicked => {
+                    root.settings-popup-confirmed();
+                    settings-popup.close();
+                }
+            }
+        }
+    }
+
+    //upload message popup
+    in-out property <string> uploadMessage;
+    callback show-upload-message;
+    show-upload-message => { upload-message-popup.show(); }
+
+    upload-message-popup:= PopupWindow {
+        width: parent.width;
+        height: parent.height/2;
+        x: (parent.width - self.width)/2;
+        y: (parent.height - self.height)/2;
+
+        close-policy: PopupClosePolicy.no-auto-close;
+
+        Rectangle {
+            background: root.background;
+            border-color: root.textColor;
+            border-width: 1px;
+
+            VerticalLayout {
+                padding: 25px;
+                spacing: 20px;
+
+                TextEdit {
+                    text: root.uploadMessage;
+                    horizontal-alignment: center;
+                    read-only: true;
+                }
+
+                Button {
+                    text: "OK";
+                    clicked => {
+                        upload-message-popup.close();
+                        root.uploading = false;
+                    }
+                }
+            }
+        }
+    }
+
+
+}

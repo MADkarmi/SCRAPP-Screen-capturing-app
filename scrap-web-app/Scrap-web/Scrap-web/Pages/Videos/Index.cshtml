@@ -1,0 +1,60 @@
+﻿@page
+@using Scrap_web.Models.Videos
+@model Scrap_web.Pages.Videos.IndexModel
+@{
+    ViewData["Title"] = "My Uploads";
+}
+
+<div class="space-y-6">
+    <div class="section-name justify-center">
+        <h1>My Videos</h1>
+    </div>
+
+    @if (!Model.Videos.Any())
+    {
+        <div class="rounded-lg border border-border bg-background-distinct p-8 text-center">
+            <p class="text-lg text-second">
+                You haven't uploaded any videos yet.
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            @foreach (var video in Model.Videos)
+            {
+                <article class="overflow-hidden rounded-lg border border-border bg-background-distinct @(video.Status == VideoStatus.Published ? "hover:outline-4" : "")">
+
+                    @if(video.Status == VideoStatus.Published)
+                    {
+                        <a asp-page="/Videos/Watch"
+                           asp-route-id="@video.Id"
+                           class="group block">
+                        
+                           <partial name="Shared/_UserVideoCardPartial" model="video" />
+                        </a>
+                    }
+                    else
+                    {
+                        <partial name="Shared/_UserVideoCardPartial" model="video" />
+                    }
+
+                    <div class="space-y-4 p-4">
+                        <form method="post"
+                                asp-page-handler="Delete"
+                                asp-route-id="@video.Id"
+                                >
+
+                            <button type="submit"
+                                    class="form-button w-full bg-red-800 hover:bg-red-950"
+                                    onclick="return confirm('Are you sure you want to delete this video?');">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                    
+                </article>
+            }
+        </div>
+    }
+</div>

@@ -1,0 +1,22 @@
+import { StyleMetrics, Palette, Spinner  } from "std-widgets.slint";
+
+export component TransparentLoadingSpinner inherits Rectangle {
+    width: 100px;
+    height: 100px;
+
+    background: transparent;
+
+    VerticalLayout {
+        alignment: center;
+
+        // Układ poziomy centruje element w osi X
+        HorizontalLayout {
+            alignment: center;
+            Spinner {
+                width: 100px;
+                height: 100px;
+                indeterminate: true;
+            }
+        }
+    }
+}

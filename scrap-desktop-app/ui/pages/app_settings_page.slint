@@ -1,0 +1,175 @@
+import {
+    Button,
+    VerticalBox,
+    HorizontalBox,
+    ListView,
+    StandardButton,
+    StandardListView,
+    GridBox,
+    GroupBox,
+    ComboBox,
+    CheckBox,
+    StyleMetrics,
+    Slider
+} from "std-widgets.slint";
+import { Page } from "page.slint";
+import { SideBar } from "../partials/sidebar.slint";
+import { Button, Palette } from "std-widgets.slint";
+
+export struct RecorderSupportedSettings{
+    fileFormat: [string],
+    fps: [string],
+    resolution: [string],
+}
+
+export component AppSettingsPage inherits Page {
+    showPageTitle: false;
+
+    callback save_settings();
+    callback discard();
+
+    in-out property <string> folderPath;
+    callback folder-picker();
+
+    in property <RecorderSupportedSettings> RecorderSupportedSettings;
+    in-out property <[string]> fileFormatOptions: RecorderSupportedSettings.fileFormat; //["mp4", "mkv", "mov", "avi"];
+    in-out property <[string]> fpsOptions: RecorderSupportedSettings.fps; //["30","60","120"];
+    in-out property <[string]> resolutionOptions: RecorderSupportedSettings.resolution; //["HD 720p", "FullHD 1080p", "QHD 1440p"];
+
+
+    in-out property <string> fileFormat;
+    in-out property <string> fps;
+    in-out property <string> resolution;
+
+    VerticalLayout {
+        HorizontalLayout {
+            min-width: 800px;
+
+            output:= Rectangle{
+                VerticalLayout {
+                    y: 30px;
+                    x: 30px;
+                    width: parent.width - 2*self.x;
+                    spacing: 5px;
+                    @children height: 70px;
+                    path:= Rectangle{
+                        background: Palette.background.brighter(0.2);
+                        HorizontalLayout{
+                            spacing: 5px;
+
+                            t:= Text {
+                                text: "File path:";
+                                vertical-alignment: center;
+                                width: 150px;
+                                font-size: 18px;
+                            }
+
+                            Text {
+                                min-width: 300px;
+                                text: folderPath;
+                                vertical-alignment: center;
+                                horizontal-alignment: left;
+                                font-size: 18px;
+                                overflow: elide;
+                            }
+
+                            padding-right: 15px;
+                            Button {
+                                text: "Browse";
+                                width: 100px;
+                                clicked => {
+                                    root.folder-picker();
+                                }
+                            }
+                        }
+                    }
+                    fileFormat:= Rectangle{
+                        background: Palette.background.brighter(0.2);
+                        HorizontalLayout{
+                            spacing: 5px;
+                            fileFormatLabel := Text {
+                                width: 200px;
+                                text: "file format";
+                                vertical-alignment: center;
+                                font-size: 18px;
+
+                            }
+                            ComboBox {
+                                width: parent.width - fileFormatLabel.width - 20px;
+                                model: fileFormatOptions;
+                                current-value: root.fileFormat;
+                                selected(selectedFormat) => {
+                                    root.fileFormat = selectedFormat;
+                                }
+                            }
+                        }
+                    }
+                    fps:= Rectangle{
+                        background: Palette.background.brighter(0.2);
+                        HorizontalLayout{
+                            spacing: 5px;
+                            fpsLabel := Text{
+                                width: 200px;
+                                text: "recording FPS";
+                                vertical-alignment: center;
+                                font-size: 18px;
+                            }
+                            ComboBox {
+                                model: fpsOptions;
+                                current-value: root.fps;
+                                selected(selectedFps) => {
+                                    root.fps = selectedFps;
+                                }
+                                width: parent.width - fpsLabel.width - 20px;
+                            }
+                        }
+                    }
+                    resolutionSetting:= Rectangle{
+                        background: Palette.background.brighter(0.2);
+                        HorizontalLayout{
+                            spacing: 5px;
+                            resolutionLabel := Text {
+                                width: 200px;
+                                text: "Recording Resolution";
+                                vertical-alignment: center;
+                                font-size: 18px;
+                            }
+                            ComboBox {
+                                width: parent.width - resolutionLabel.width - 20px;
+                                model: resolutionOptions;
+                                current-value: root.resolution;
+                                selected(selectedResolution) => {
+                                    root.resolution = selectedResolution;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        HorizontalLayout {
+            height: 50px;
+            spacing: 8px;
+            Rectangle {}
+
+            discardButton:= Button{
+                text: "Discard Settings";
+                clicked => {
+                    root.discard();
+                }
+
+            }
+            okButton:= Button{
+                text: "Save Settings";
+                clicked => {
+                    root.save_settings();
+                }
+            }
+
+
+        }
+
+    }
+
+}

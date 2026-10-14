@@ -1,0 +1,1 @@
+Icons acquired from: [text](https://www.flaticon.com/)

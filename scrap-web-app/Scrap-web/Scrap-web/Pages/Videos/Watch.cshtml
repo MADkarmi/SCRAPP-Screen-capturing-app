@@ -1,0 +1,167 @@
+﻿@page "{id:guid}"
+@using Scrap_web.Models.Videos
+@model Scrap_web.Pages.Videos.WatchModel
+@{
+    ViewData["Title"] = Model.Video?.Title ?? "Video";
+}
+
+@if (Model.Video is not null)
+{
+    <div class="mx-auto w-full max-w-5xl px-4 py-8">
+        <div class="w-full md:3/4">
+            <div class="aspect-video overflow-hidden rounded-lg bg-background-distinct">
+                @if (Model.Video.Status == VideoStatus.Published)
+                {
+                    <div class="flex h-full items-center justify-center">
+                        <video controls
+                               preload="metadata"
+                               class="h-full w-full">
+                            <source src="@Url.Page("/Videos/Stream", new { id = Model.Video.Id })"
+                                    type="@Model.Video.ContentType" />
+                            Your browser does not support HTML5 video.
+                        </video>
+                    </div>
+                }
+                else
+                {
+                    <div class="flex h-full flex-col items-center justify-center gap-2">
+                        <span class="text-lg text-second">
+                            @Model.Video.Status
+                        </span>
+
+                        @if (Model.Video.Status == VideoStatus.Processing)
+                        {
+                            <span class="text-third">
+                                This video is still being processed.
+                            </span>
+                        }
+                        else if (Model.Video.Status == VideoStatus.Ready)
+                        {
+                            <span class="text-third">
+                                This video is ready to be published.
+                            </span>
+                        }
+                        else if (Model.Video.Status == VideoStatus.Failed)
+                        {
+                            <span class="text-third">
+                                Video processing failed.
+                            </span>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+        
+
+        <div class="mt-6">
+            <h1 class="text-2xl font-semibold text-primary">
+                @Model.Video.Title
+            </h1>
+
+            <div class="mt-2 flex flex-wrap items-center gap-2 text-sm text-third">
+                <span>
+                    @Model.Video.Owner.UserName
+                </span>
+
+                <span>•</span>
+
+                <span>Published</span>
+
+                @if (Model.Video.Status == VideoStatus.Published &&
+                            Model.Video.PublishedAt.HasValue)
+                {
+                    <span>•</span>
+
+                    <time datetime="@Model.Video.CreatedAt.ToString("O")">
+                        @(Model.Video.CreatedAt.ToLocalTime().ToString("MMM d, yyyy"))
+                    </time>
+                }
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Video.Description))
+            {
+                <div id="description"
+                     class="mt-6 flex max-h-24 overflow-hidden rounded-lg bg-background-distinct p-4 transition-[max-height] duration-300">
+                    <button type="button"
+                            id="description-toggle"
+                            class="mr-6 mb-3 hidden text-sm font-medium text-primary hover:text-second"
+                            aria-expanded="false"
+                            aria-controls="description"
+                            aria-label="Expand description"
+                            onclick="toggleDescription()">
+                        <svg id="description-icon"
+                             class="h-5 w-5 transition-transform duration-300"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke="currentColor"
+                             stroke-width="2">
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="m19 9-7 7-7-7" />
+                        </svg>
+                    </button> 
+                    
+                     <p class="text-primary"
+                       id="description-content">
+                        @Model.Video.Description                        
+                    </p>
+                    
+                </div>
+                
+            }
+        </div>
+    </div>
+}
+
+@section Scripts{
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const description = document.getElementById("description");
+            const content = document.getElementById("description-content");
+            const button = document.getElementById("description-toggle");
+
+            if (!description || !content || !button) {
+                return;
+            }
+
+            console.log(content.scrollHeight, description.clientHeight);
+
+            if (content.scrollHeight >= description.clientHeight) {
+                button.classList.remove("hidden");
+                button.classList.add("flex");
+            }
+        });
+
+        function toggleDescription() {
+            const description = document.getElementById("description");
+            const button = document.getElementById("description-toggle");
+            const icon = document.getElementById("description-icon");
+            const isExpanded = button.getAttribute("aria-expanded") === "true";
+            
+            if (isExpanded) {
+                description.classList.remove("max-h-[1000px]");
+                description.classList.add("max-h-24");
+                button.setAttribute("aria-expanded", "false");
+                button.setAttribute("aria-label", "Expand description");
+
+                icon.innerHTML = `
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m19 9-7 7-7-7" />
+                `;
+            }
+            else {
+                description.classList.remove("max-h-24");
+                description.classList.add("max-h-[1000px]");
+                button.setAttribute("aria-expanded", "true");
+                button.setAttribute("aria-label", "Collapse description");
+
+                icon.innerHTML = `
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m5 15 7-7 7 7" />
+                `;
+            }
+        }
+    </script>
+}

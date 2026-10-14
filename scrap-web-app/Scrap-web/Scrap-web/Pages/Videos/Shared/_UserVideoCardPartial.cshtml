@@ -1,0 +1,96 @@
+﻿@using Scrap_web.Models.Videos
+@model Models.Videos.Video
+
+
+
+<div class="aspect-video bg-fourth">
+    @if (Model.Status == VideoStatus.Published)
+    {
+        <video class="h-full w-full object-cover"
+                preload="metadata">
+            <source src="@Url.Page("/Videos/Stream", new { id = Model.Id })"
+                    type="@Model.ContentType" />
+        </video>
+    }
+    else
+    {
+        <div class="flex h-full items-center justify-center">
+            <span class="text-third">
+                @if (Model.Status == VideoStatus.Processing)
+                {
+                    <text>Processing...</text>
+                }
+                else if (Model.Status == VideoStatus.Failed)
+                {
+                    <text>Upload failed</text>
+                }
+                else
+                {
+                    <text>No thumbnail</text>
+                }
+            </span>
+        </div>
+    }
+</div>
+
+<div class="space-y-4 p-4">
+    <div>
+        <h2 class="truncate text-lg font-semibold text-second">
+            @Model.Title
+        </h2>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Description))
+        {
+            <p class="mt-1 line-clamp-2 text-sm text-third">
+                @Model.Description
+            </p>
+        }
+    </div>
+
+    <div class="flex items-center justify-between gap-3">
+        <span class="text-sm text-third">
+            @Model.CreatedAt.ToLocalTime().ToString("g")
+        </span>
+
+        @switch (Model.Status)
+        {
+            case VideoStatus.Processing:
+                <span class="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                    Processing
+                </span>
+                break;
+
+            case VideoStatus.Ready:
+                <span class="status-alert-succes rounded-full px-3 py-1 text-xs font-medium">
+                    Ready
+                </span>
+                break;
+
+            case VideoStatus.Published:
+                <span class="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                    Published
+                </span>
+                break;
+
+            case VideoStatus.Failed:
+                <span class="status-alert-error rounded-full px-3 py-1 text-xs font-medium">
+                    Failed
+                </span>
+                break;
+        }
+    </div>
+
+    @if (Model.Status == VideoStatus.Ready)
+    {
+        <form method="post"
+                asp-page-handler="Publish"
+                asp-route-id="@Model.Id">
+            <button type="submit"
+                    class="button-primary w-full">
+                Publish
+            </button>
+        </form>
+    }
+</div>
+
+
